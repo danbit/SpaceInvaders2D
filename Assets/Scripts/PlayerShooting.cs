@@ -5,7 +5,7 @@ public class PlayerShooting : MonoBehaviour {
 
 	public GameObject bullet;
 	public Transform playerBulletSpawn;
-	public float fireRate = 0.5f;
+	public float fireRate = 0.25f;
 
 	private Renderer _renderer;
 	private float nextFire = 0.0f;
@@ -16,20 +16,17 @@ public class PlayerShooting : MonoBehaviour {
 
 	void Update(){
 		if (canPlay()) {
-			Shot ();
+			if ((Input.GetButtonDown ("Fire1") || Input.GetButtonDown ("Fire2")) && Time.time > nextFire) {
+				nextFire = Time.time + fireRate;
+
+				GameObject newShot = Instantiate<GameObject> (bullet);
+				newShot.tag = "ShotPlayer";
+				newShot.transform.position = playerBulletSpawn.transform.position;
+			}
 		}
 	}
 
-	void Shot(){
-		if ((Input.GetButtonDown ("Fire1") || Input.GetButtonDown ("Fire2")) && Time.time > nextFire) {
-			nextFire = Time.time + fireRate;
-
-			GameObject newShot = Instantiate<GameObject> (bullet);
-			newShot.tag = "ShotPlayer";
-			newShot.transform.position = playerBulletSpawn.transform.position;
-		}
-	}
-
+	//TODO create a Game.pause state
 	private bool canPlay(){
 		return _renderer.enabled;
 	}

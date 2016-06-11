@@ -15,23 +15,19 @@ public class PlayerRespawn : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D other) {		
 		if (other.tag == "ShotEnemy") {
-			if(playerRenderer.enabled)
-				StartCoroutine (DieAndRespawn (waitTime));
+			playerRenderer.enabled = false;
+			pause (true);
+
+			StartCoroutine (Respawn (waitTime));
 		}
 	}
 
-	IEnumerator DieAndRespawn(float waitTime) {
-		playerRenderer.enabled = false;
-
+	IEnumerator Respawn(float waitTime) {
 		destroyAllEnemiesShots ();
-		enabledWave (false);
-		enabledEnemies (false);
+		yield return StartCoroutine(CoroutineUtilities.WaitForRealTime(waitTime));
 
-		playerPrefab.transform.position = Vector3.zero;
-		yield return new WaitForSeconds(waitTime);
+		pause (false);
 
-		enabledWave (true);
-		enabledEnemies (true);
 		playerPrefab.transform.position = spawnPoint.position;
 		playerRenderer.enabled = true;
 	}
@@ -43,15 +39,8 @@ public class PlayerRespawn : MonoBehaviour {
 		}
 	}
 
-	void enabledEnemies(bool enabled){
-		EnemyController[] enemies = GameObject.FindObjectsOfType<EnemyController> ();
-		foreach (EnemyController enemy in enemies) {
-			enemy.enabled = enabled;
-		}
+	private void pause(bool paused){
+		Time.timeScale = paused ? 0 : 1;
 	}
 
-	void enabledWave(bool enabled){
-		WaveController waveController = GameObject.FindObjectOfType<WaveController> ();
-		waveController.enabled = enabled;
-	}
 }
