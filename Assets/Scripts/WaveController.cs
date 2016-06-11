@@ -8,6 +8,8 @@ public class WaveController : MonoBehaviour {
 	private const float HORIZONTAL_ENEMY_OFFSET = 1.27f;
 	private const float VERTICAL_ENEMY_OFFSET = 1.09f;
 
+	public static bool isWaveDone = false;
+
 	public GameObject enemyPrefab;
 	public float speed;
 	public float direction;
@@ -16,7 +18,7 @@ public class WaveController : MonoBehaviour {
 
 	void Start () {
 		_transform = this.transform;
-		spawnWave ();	
+		SpawnWave ();	
 	}
 
 	void Update () {
@@ -28,18 +30,27 @@ public class WaveController : MonoBehaviour {
 		}
 
 		if (_transform.childCount == 0) {
-			spawnWave ();
+			StartCoroutine(SpawnWave ());
 		}
 	}
 
-	private void spawnWave(){
+	IEnumerator SpawnWave(){
+		yield return StartCoroutine (CreateEnemies ());
+
+		Debug.Log ("wave done!");
+		isWaveDone = true;
+	}
+
+	IEnumerator CreateEnemies(){
 		for (int x = 0; x < ENEMIES_COLUMN; x++) {
 			for (int y = 0; y < ENEMIES_ROW; y++) {
 				GameObject newEnemy = Instantiate (enemyPrefab);
-				newEnemy.transform.SetParent (this.transform);
+				newEnemy.gameObject.name = "Enemy " + y + 1;
+				newEnemy.transform.SetParent (_transform);
 				newEnemy.transform.localPosition = new Vector3 (-6.5f + x * HORIZONTAL_ENEMY_OFFSET, y * VERTICAL_ENEMY_OFFSET, 0.0f); 
 			}
 		}
+		yield return new WaitForSeconds (0.0f);
 	}
 
 }

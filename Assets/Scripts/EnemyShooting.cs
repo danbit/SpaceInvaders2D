@@ -4,38 +4,32 @@ using System.Collections;
 public class EnemyShooting : MonoBehaviour {
 
 	public GameObject bullet;
-	public float speed;
-	public float fireRate = 0.5f;
-	public int maxAmountShot = 10;
+	public AudioClip shotSound1;
+	public AudioClip shotSound2;
+	public float fireRate;
+	public int maxAmountShot;
 
 	private float nextFire = 0.0f;
 
 	void Start () {
-		nextFire = Random.Range (0.5f, 1.0f);
+		nextFire = Random.Range (2.0f, 10.0f);
 	}
 
 	void Update () {
-		if (Time.time > nextFire) {
+		if (WaveController.isWaveDone && Time.time >= nextFire) {		
 			GameObject[] shotEnemies = GameObject.FindGameObjectsWithTag ("ShotEnemy");
 
-			if (shotEnemies.Length < maxAmountShot) {
+			if (shotEnemies.Length <= maxAmountShot) {
 				GameObject newShot = Instantiate<GameObject> (bullet);
 				newShot.tag = "ShotEnemy";
 				newShot.transform.position = this.transform.position;
+
+				SoundManager.instance.ChangeVolume (0.4f);
+				SoundManager.instance.RandomizeSfx (shotSound1, shotSound2);
 			}
 
 			nextFire = Time.time + fireRate;
 		}
 	}
 
-	void OnTriggerEnter2D (Collider2D other) {
-		if (other.tag == "ShotPlayer") {
-
-			GameObject.FindObjectOfType<Score> ().UpdateScoreUI ();
-
-			this.enabled = false;
-			Destroy (this.gameObject);
-			Destroy (other.gameObject);
-		}
-	}
 }
