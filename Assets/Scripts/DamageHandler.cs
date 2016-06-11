@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class DamageHandler : MonoBehaviour {
@@ -20,7 +21,7 @@ public class DamageHandler : MonoBehaviour {
 
 	void Update () {
 		if (health < 0) {
-			Die ();
+			GameOver ();
 		}	
 	}
 
@@ -29,9 +30,8 @@ public class DamageHandler : MonoBehaviour {
 		UpdateHealthUI (); 
 	}
 
-	private void Die(){
-		Debug.Log ("Die");
-		Destroy (this.gameObject);
+	private void GameOver(){
+		SceneManager.LoadScene ("GameOver");
 	}
 
 	private void UpdateHealthUI(){
