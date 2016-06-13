@@ -12,7 +12,7 @@ public class Score : MonoBehaviour {
 		score += 10;
 
 		if (score % 1000 == 0) {
-			GameObject.FindObjectOfType<DamageHandler> ().LevelUp ();
+			GameObject.FindObjectOfType<PlayerHealth> ().LevelUp ();
 		}
 
 		scoreText.text = score.ToString ();

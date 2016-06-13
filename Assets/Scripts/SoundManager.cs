@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SoundManager : MonoBehaviour 
-{
+public class SoundManager : MonoBehaviour {
 	public AudioSource efxSource;                   //Drag a reference to the audio source which will play the sound effects.
 	public AudioSource musicSource;                 //Drag a reference to the audio source which will play the music.
 	public static SoundManager instance = null;     //Allows other scripts to call functions from SoundManager.             
 	public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
 	public float highPitchRange = 1.05f;            //The highest a sound effect will be randomly pitched.
 
-
-	void Awake ()
-	{
+	void Awake (){
 		//Check if there is already an instance of SoundManager
 		if (instance == null)
 			//if not, set it to this.
@@ -25,10 +22,8 @@ public class SoundManager : MonoBehaviour
 		DontDestroyOnLoad (gameObject);
 	}
 
-
 	//Used to play single sound clips.
-	public void PlaySingle(AudioClip clip)
-	{
+	public void PlaySingle(AudioClip clip){
 		//Set the clip of our efxSource audio source to the clip passed in as a parameter.
 		efxSource.clip = clip;
 
@@ -36,14 +31,8 @@ public class SoundManager : MonoBehaviour
 		efxSource.Play ();
 	}
 
-
-	public void ChangeVolume(float volume){
-		efxSource.volume = volume;
-	}
-
 	//RandomizeSfx chooses randomly between various audio clips and slightly changes their pitch.
-	public void RandomizeSfx (params AudioClip[] clips)
-	{
+	public void RandomizeSfx (params AudioClip[] clips){
 		//Generate a random number between 0 and the length of our array of clips passed in.
 		int randomIndex = Random.Range(0, clips.Length);
 
@@ -58,7 +47,6 @@ public class SoundManager : MonoBehaviour
 
 		//Play the clip.
 		efxSource.Play();
-
-		efxSource.volume = 1;
 	}
+
 }

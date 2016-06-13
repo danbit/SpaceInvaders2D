@@ -5,7 +5,7 @@ using System.Collections;
 public class HomeUI : MonoBehaviour {
 
 	public void StartGame(){
-		SceneManager.LoadScene ("MainLevel");
+		GameManager.instance.SetGameState (GameManager.GameState.STATE_PLAYING);
 	}
 
 }

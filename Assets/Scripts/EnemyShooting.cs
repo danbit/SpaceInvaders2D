@@ -4,8 +4,7 @@ using System.Collections;
 public class EnemyShooting : MonoBehaviour {
 
 	public GameObject bullet;
-	public AudioClip shotSound1;
-	public AudioClip shotSound2;
+	public AudioClip shotSound;
 	public float fireRate;
 	public int maxAmountShot;
 
@@ -13,10 +12,11 @@ public class EnemyShooting : MonoBehaviour {
 
 	void Start () {
 		nextFire = Random.Range (2.0f, 10.0f);
+		enabled = false;
 	}
 
 	void Update () {
-		if (WaveController.isWaveDone && Time.time >= nextFire) {		
+		if (Time.time >= nextFire) {
 			GameObject[] shotEnemies = GameObject.FindGameObjectsWithTag ("ShotEnemy");
 
 			if (shotEnemies.Length <= maxAmountShot) {
@@ -24,8 +24,7 @@ public class EnemyShooting : MonoBehaviour {
 				newShot.tag = "ShotEnemy";
 				newShot.transform.position = this.transform.position;
 
-				SoundManager.instance.ChangeVolume (0.4f);
-				SoundManager.instance.RandomizeSfx (shotSound1, shotSound2);
+				SoundManager.instance.RandomizeSfx (shotSound);
 			}
 
 			nextFire = Time.time + fireRate;
