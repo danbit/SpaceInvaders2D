@@ -8,8 +8,6 @@ public class GameManager : MonoBehaviour {
 	private const int INITIAL_PLAYER_HEALTH = 3;
 	public static GameManager instance = null;
 
-	private Text healthText;
-
 	public enum GameState{
 		STATE_HOME_MENU,
 		STATE_PLAYING,
@@ -32,6 +30,14 @@ public class GameManager : MonoBehaviour {
 
 		DontDestroyOnLoad (gameObject);
 		SetGameState(GameState.STATE_HOME_MENU);
+	}
+
+	void OnLevelWasLoaded(int level){
+		Debug.Log ("OnLevelWasLoaded= "+level);
+		if (level == 1) {
+			Debug.Log ("OnLevelWasLoaded");
+			GameObject.FindObjectOfType<Health> ().UpdateHealthUI (INITIAL_PLAYER_HEALTH);
+		}
 	}
 
 	void UpdateGameState(){
@@ -58,10 +64,6 @@ public class GameManager : MonoBehaviour {
 		UpdateGameState ();
 	}
 
-	public void UpdateHealthUI(float health){
-		healthText.text = health.ToString ();
-	}
-
 	public void Pause(){
 		Time.timeScale = 0;
 	}
@@ -80,13 +82,6 @@ public class GameManager : MonoBehaviour {
 		EnemyShooting[] enemies = GameObject.FindObjectsOfType<EnemyShooting> ();
 		foreach (EnemyShooting enemy in enemies) {
 			enemy.enabled = enabled;
-		}
-	}
-
-	void OnLevelWasLoaded(int level){
-		if (level == 1) {
-			healthText = GameObject.Find ("HealthText").GetComponent<Text> ();
-			UpdateHealthUI(INITIAL_PLAYER_HEALTH);
 		}
 	}
 

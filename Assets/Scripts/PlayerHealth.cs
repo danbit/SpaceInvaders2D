@@ -10,7 +10,7 @@ public class PlayerHealth : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other){
 		if (other.tag == "ShotEnemy" && !GameManager.instance.PlayerIsDead) {
 			health--;
-			GameManager.instance.UpdateHealthUI(health); 
+			GameObject.FindObjectOfType<Health> ().UpdateHealthUI (health);
 		}
 	}
 
@@ -22,7 +22,7 @@ public class PlayerHealth : MonoBehaviour {
 
 	public void LevelUp(){
 		health++;
-		GameManager.instance.UpdateHealthUI(health); 
+		GameObject.FindObjectOfType<Health> ().UpdateHealthUI (health);
 	}
 		
 }

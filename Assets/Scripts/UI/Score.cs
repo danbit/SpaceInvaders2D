@@ -4,8 +4,6 @@ using System.Collections;
 
 public class Score : MonoBehaviour {
 
-	public Text scoreText;
-
 	private int score = 0;
 
 	public void UpdateScoreUI(){
@@ -14,7 +12,6 @@ public class Score : MonoBehaviour {
 		if (score % 1000 == 0) {
 			GameObject.FindObjectOfType<PlayerHealth> ().LevelUp ();
 		}
-
-		scoreText.text = score.ToString ();
+		GetComponent<Text>().text = score.ToString ();
 	}
 }
