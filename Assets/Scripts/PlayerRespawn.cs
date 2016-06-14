@@ -15,10 +15,12 @@ public class PlayerRespawn : MonoBehaviour {
 	IEnumerator Respawn(){
 		yield return StartCoroutine(CoroutineUtilities.WaitForRealTime(1.5f));
 
-		GameObject newPlayer = Instantiate<GameObject> (playerPrefab);
-		newPlayer.transform.position = this.transform.position;		
+		if (!GameManager.instance.IsGameOver ()) {
+			GameObject newPlayer = Instantiate<GameObject> (playerPrefab);
+			newPlayer.transform.position = this.transform.position;		
 
-		GameManager.instance.EnableAllEnemies (true);
+			GameManager.instance.EnableAllEnemies (true);
+		}
 	}
 
 }

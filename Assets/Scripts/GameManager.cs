@@ -33,9 +33,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void OnLevelWasLoaded(int level){
-		Debug.Log ("OnLevelWasLoaded= "+level);
 		if (level == 1) {
-			Debug.Log ("OnLevelWasLoaded");
 			GameObject.FindObjectOfType<Health> ().UpdateHealthUI (INITIAL_PLAYER_HEALTH);
 		}
 	}
@@ -72,15 +70,19 @@ public class GameManager : MonoBehaviour {
 		Time.timeScale = 1;
 	}
 
-	public bool isPaused(){
+	public bool IsPaused(){
 		return Time.timeScale == 0;
+	}
+
+	public bool IsGameOver(){
+		return gameState == GameState.STATE_GAME_OVER;
 	}
 
 	public void EnableAllEnemies(bool enabled){
 		GameObject.FindObjectOfType<WaveController> ().enabled = enabled;
 
-		EnemyShooting[] enemies = GameObject.FindObjectsOfType<EnemyShooting> ();
-		foreach (EnemyShooting enemy in enemies) {
+		EnemyDamageHandler[] enemies = GameObject.FindObjectsOfType<EnemyDamageHandler> ();
+		foreach (EnemyDamageHandler enemy in enemies) {
 			enemy.enabled = enabled;
 		}
 	}
