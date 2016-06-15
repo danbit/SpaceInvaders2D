@@ -1,5 +1,8 @@
 # SpaceInvaders2D
  The project is just a simple personal practice for programming using Unity engine. It is a remake of the classic video game "Space Invaders".  This project was inspired on the private course "Criando um Jogo do Zero com a Unity 5" of Alexandre de Sá Ribeiro (http://academiadeproducaodejogos.com.br/). 
+ 
+## Demo
+http://danbit.github.io/space-invaders-2d/
 
 ## ScreenShots
 ![Main Menu](https://github.com/danbit/danbit.github.io/blob/master/space-invaders-2d/images/screenshot_01.png)
