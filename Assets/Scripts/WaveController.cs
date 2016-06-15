@@ -25,7 +25,7 @@ public class WaveController : MonoBehaviour {
 	void Update () {				
 		_transform.Translate( new Vector3(speed * direction * Time.deltaTime, 0.0f, 0.0f));
 
-		if (_transform.position.x <= -3.1f || _transform.position.x >= 3.4f) {
+		if (_transform.position.x <= -2.4f || _transform.position.x >= 2.7f) {
 			direction = -direction;
 			// TODO to down wave
 		}
