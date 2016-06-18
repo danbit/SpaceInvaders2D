@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using SP2D.Managers;
 
-public class HomeUI : MonoBehaviour {
+namespace SP2D.UI{
 
-	public void StartGame(){
-		GameManager.instance.SetGameState (GameManager.GameState.STATE_PLAYING);
+	public class HomeUI : MonoBehaviour {
+
+		public void StartGame(){
+			GameManager.instance.SetGameState (GameManager.GameState.STATE_PLAYING);
+		}
+
 	}
-
 }

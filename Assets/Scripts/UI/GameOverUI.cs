@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using SP2D.Managers;
 
-public class GameOverUI : MonoBehaviour {
+namespace SP2D.UI{
 
-	public void Restart(){
-		GameManager.instance.SetGameState (GameManager.GameState.STATE_PLAYING);
-	}
+	public class GameOverUI : MonoBehaviour {
 
-	public void QuitGame(){
-		Application.Quit ();
+		public void Restart(){
+			GameManager.instance.SetGameState (GameManager.GameState.STATE_PLAYING);
+		}
+
+		public void QuitGame(){
+			Application.Quit ();
+		}
+
 	}
 
 }
-

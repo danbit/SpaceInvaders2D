@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DestroyByBoundary : MonoBehaviour {
+namespace SP2D{
 
-	void OnTriggerEnter2D (Collider2D other) {
-		Destroy(other.gameObject);
+	public class DestroyByBoundary : MonoBehaviour {
+
+		void OnTriggerEnter2D (Collider2D other) {
+			Destroy(other.gameObject);
+		}
+
 	}
 
 }

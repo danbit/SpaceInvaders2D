@@ -1,26 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SP2D.Utils;
+using SP2D.Managers;
 
-public class PlayerRespawn : MonoBehaviour {
+namespace SP2D{
+		
+	public class PlayerRespawn : MonoBehaviour {
 
-	public GameObject playerPrefab;
+		public GameObject playerPrefab;
 
-	void Update(){
-		if (GameManager.instance.PlayerIsDead) {
-			GameManager.instance.PlayerIsDead = false;
-			StartCoroutine (Respawn ());
+		void Update(){
+			if (GameManager.instance.PlayerIsDead) {
+				GameManager.instance.PlayerIsDead = false;
+				StartCoroutine (Respawn ());
+			}
 		}
-	}
 
-	IEnumerator Respawn(){
-		yield return StartCoroutine(CoroutineUtilities.WaitForRealTime(1.5f));
+		IEnumerator Respawn(){
+			yield return StartCoroutine(CoroutineUtilities.WaitForRealTime(1.5f));
 
-		if (!GameManager.instance.IsGameOver ()) {
-			GameObject newPlayer = Instantiate<GameObject> (playerPrefab);
-			newPlayer.transform.position = this.transform.position;		
+			if (!GameManager.instance.IsGameOver ()) {
+				GameObject newPlayer = Instantiate<GameObject> (playerPrefab);
+				newPlayer.transform.position = this.transform.position;		
 
-			GameManager.instance.EnableAllEnemies (true);
+				GameManager.instance.EnableAllEnemies (true);
+			}
 		}
+
 	}
 
 }

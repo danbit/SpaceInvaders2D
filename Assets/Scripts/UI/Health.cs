@@ -1,11 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using SP2D.Managers;
 
-public class Health : MonoBehaviour {
+namespace SP2D.UI{
 
-	public void UpdateHealthUI(float health){
-		GetComponent<Text>().text = health.ToString ();
+	public class Health : MonoBehaviour {
+
+		void Start(){
+			UpdateHealthUI (GameManager.INITIAL_PLAYER_HEALTH);
+		}
+
+		public void UpdateHealthUI(float health){
+			GetComponent<Text>().text = health.ToString ();
+		}
+
 	}
 
 }

@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Destroyer : MonoBehaviour {
+namespace SP2D{
+	
+	public class Destroyer : MonoBehaviour {
 
-	void DestroyGameObject () {
-		Destroy (this.gameObject);
+		void DestroyGameObject () {
+			Destroy (this.gameObject);
+		}
+
 	}
 
 }

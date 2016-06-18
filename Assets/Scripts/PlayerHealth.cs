@@ -2,27 +2,34 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using SP2D.Managers;
+using SP2D.Utils;
+using SP2D.UI;
 
-public class PlayerHealth : MonoBehaviour {
+namespace SP2D{
+		
+	public class PlayerHealth : MonoBehaviour {
 
-	public static int health = 3;
+		public static int health;
 
-	void OnTriggerEnter2D(Collider2D other){
-		if (other.tag == "ShotEnemy" && !GameManager.instance.PlayerIsDead) {
-			health--;
+		void OnTriggerEnter2D(Collider2D other){
+			if (other.tag == "ShotEnemy" && !GameManager.instance.PlayerIsDead) {
+				health--;
+				GameObject.FindObjectOfType<Health> ().UpdateHealthUI (health);
+			}
+		}
+
+		void Update () {
+			if (health == 0) {
+				GameManager.instance.SetGameState (GameManager.GameState.STATE_GAME_OVER);
+			}	
+		}
+
+		public void LevelUp(){
+			health++;
 			GameObject.FindObjectOfType<Health> ().UpdateHealthUI (health);
 		}
+			
 	}
 
-	void Update () {
-		if (health == 0) {
-			GameManager.instance.SetGameState (GameManager.GameState.STATE_GAME_OVER);
-		}	
-	}
-
-	public void LevelUp(){
-		health++;
-		GameObject.FindObjectOfType<Health> ().UpdateHealthUI (health);
-	}
-		
 }

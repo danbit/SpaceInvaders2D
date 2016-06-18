@@ -2,16 +2,20 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Score : MonoBehaviour {
+namespace SP2D.UI{
 
-	private int score = 0;
+	public class Score : MonoBehaviour {
 
-	public void UpdateScoreUI(){
-		score += 10;
+		private int score = 0;
 
-		if (score % 1000 == 0) {
-			GameObject.FindObjectOfType<PlayerHealth> ().LevelUp ();
+		public void UpdateScoreUI(){
+			score += 10;
+
+			if (score % 1000 == 0) {
+				GameObject.FindObjectOfType<PlayerHealth> ().LevelUp ();
+			}
+			GetComponent<Text>().text = score.ToString ();
 		}
-		GetComponent<Text>().text = score.ToString ();
 	}
+
 }
