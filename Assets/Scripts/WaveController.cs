@@ -64,11 +64,12 @@ namespace SP2D{
 				StartCoroutine(SpawnWave ());
 			}
 
-			RandomEnemyShot ();
+			GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
+			RandomEnemyShot (enemies);
+			UpdateBoundary (enemies);
 		}
 
-		void RandomEnemyShot(){
-			GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
+		void RandomEnemyShot(GameObject[] enemies){
 			GameObject enemyToShot = enemies[Random.Range (0, enemies.Length-1)];
 
 			GameObject[] shotEnemies = GameObject.FindGameObjectsWithTag ("ShotEnemy");
@@ -90,12 +91,31 @@ namespace SP2D{
 			for (int x = 0; x < ENEMIES_COLUMN; x++) {
 				for (int y = 0; y < ENEMIES_ROW; y++) {
 					GameObject newEnemy = Instantiate (enemyPrefab);
-					newEnemy.gameObject.name = "Enemy " + y + 1;
+					newEnemy.gameObject.name = "Enemy_" + x;
 					newEnemy.transform.SetParent (_transform);
 					newEnemy.transform.localPosition = new Vector3 (-6.5f + x * HORIZONTAL_ENEMY_OFFSET, y * VERTICAL_ENEMY_OFFSET, 0.0f); 
 				}
 			}
+
 			yield return new WaitForSeconds (0.5f);
+		}
+
+		void UpdateBoundary(GameObject[] enemies){
+			ArrayList waveColumns = new ArrayList (ENEMIES_COLUMN);
+
+			foreach (GameObject enemy in enemies) {
+				int enemyColumn = int.Parse(enemy.name.Substring (enemy.name.Length - 1));
+				waveColumns.Add(enemyColumn);
+			}		
+
+			if (waveColumns.Count <= ENEMIES_COLUMN) {
+				for (int x = 0; x < ENEMIES_COLUMN; x++) {
+					//if (x == waveColumns [x]) {
+					//	break;
+					//}
+				}
+			}
+
 		}
 
 	}
