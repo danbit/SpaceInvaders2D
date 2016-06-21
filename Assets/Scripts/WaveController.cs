@@ -15,6 +15,7 @@ namespace SP2D{
 		private const float VERTICAL_ENEMY_OFFSET = 1.09f;
 		private const float WAVE_BOUNDARY_XMIN = -2.4f;
 		private const float WAVE_BOUNDARY_XMAX = 2.7f;
+		private const float ORIGINAL_SPEED = 1.0f;
 
 		public GameObject enemyPrefab;
 		public GameObject bullet;
@@ -115,6 +116,7 @@ namespace SP2D{
 			lastY = 0;
 			columnMin = 0;
 			columnMax = ENEMIES_COLUMN - 1;
+			speed = ORIGINAL_SPEED;
 
 			boundary = new Boundary ();
 			boundary.xMin = WAVE_BOUNDARY_XMIN;
@@ -141,6 +143,10 @@ namespace SP2D{
 				columnMax--;
 			}
 				
+		}
+
+		public void IncrementWaveSpeed(){
+			speed += 0.1f;
 		}
 
 	}

@@ -16,6 +16,8 @@ namespace SP2D{
 				AnimationManager.instance.PlayExplosion(transform);
 
 				Destroy (other.gameObject);
+
+				GameObject.FindObjectOfType<WaveController> ().IncrementWaveSpeed ();
 			}
 		}
 
