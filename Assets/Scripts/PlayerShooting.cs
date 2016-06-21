@@ -14,7 +14,7 @@ namespace SP2D{
 		private float nextFire = 0.0f;
 
 		void Update(){
-			if ((Input.GetButtonDown ("Fire1") || Input.GetButtonDown ("Fire2")) && Time.time > nextFire) {
+			if ((Input.GetButtonDown ("Fire1") || Input.GetButtonDown ("Jump")) && Time.time > nextFire) {
 				nextFire = Time.time + fireRate;
 
 				GameObject newShot = Instantiate<GameObject> (bullet);

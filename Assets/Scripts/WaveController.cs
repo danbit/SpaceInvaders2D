@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SP2D.Core;
 using SP2D.Managers;
+using SP2D.Utils;
 
 namespace SP2D{
 
@@ -12,64 +13,71 @@ namespace SP2D{
 		private const int ENEMIES_ROW = 5;
 		private const float HORIZONTAL_ENEMY_OFFSET = 1.27f;
 		private const float VERTICAL_ENEMY_OFFSET = 1.09f;
+		private const float WAVE_BOUNDARY_XMIN = -2.4f;
+		private const float WAVE_BOUNDARY_XMAX = 2.7f;
 
 		public GameObject enemyPrefab;
 		public GameObject bullet;
 		public AudioClip shotSound;
-		public Boundary boundary;
 		public float speed;
 		public int maxAmountShot;
 		public float waveDownDistance;
 
 		private Transform _transform;
+		private Boundary boundary;
 		private float lastY = 0;
 		private bool isGoingLeft = false;
 		private bool moveDown = false;
+		private bool waveDone = false;
 		private int columnMin;
 		private int columnMax;
 
 		void Start () {
 			_transform = this.transform;
-			SpawnWave ();	
+			StartCoroutine(SpawnWave ());
 		}
 
 		void Update () {	
+			if (waveDone) {
+				if (!isGoingLeft && !moveDown) {	
+					if (_transform.position.x > boundary.xMax) {
+						_transform.position = new Vector3 (boundary.xMax, _transform.position.y, 0.0f);
+						lastY = _transform.position.y;
+						moveDown = true;
+						isGoingLeft = true;
+					} else {
+						_transform.Translate (speed * Vector3.right * Time.deltaTime);
+					}
+				} else if (isGoingLeft && !moveDown) {
+					if (_transform.position.x < boundary.xMin) {
+						_transform.position = new Vector3 (boundary.xMin, _transform.position.y, 0.0f);
+						lastY = _transform.position.y;
+						moveDown = true;
+						isGoingLeft = false;
+					} else {
+						_transform.Translate (speed * Vector3.left * Time.deltaTime);
+					}
+				} 
 
-			if (!isGoingLeft && !moveDown) {	
-				if (_transform.position.x > boundary.xMax) {
-					_transform.position = new Vector3 (boundary.xMax, _transform.position.y, 0.0f);
-					lastY = _transform.position.y;
-					moveDown = true;
-					isGoingLeft = true;
-				} else {
-					_transform.Translate (speed * Vector3.right * Time.deltaTime);
-				}
-			} else if (isGoingLeft && !moveDown) {
-				if (_transform.position.x < boundary.xMin) {
-					_transform.position = new Vector3 (boundary.xMin, _transform.position.y, 0.0f);
-					lastY = _transform.position.y;
-					moveDown = true;
-					isGoingLeft = false;
-				} else {
-					_transform.Translate (speed * Vector3.left * Time.deltaTime);
-				}
-			} 
+				if(moveDown){
+					if (lastY - _transform.position.y >= waveDownDistance) {
+						moveDown = false;
+					}
 
-			if(moveDown){
-				if (lastY - _transform.position.y >= waveDownDistance) {
-					moveDown = false;
+					_transform.Translate (speed * Vector3.down * Time.deltaTime);
 				}
 
-				_transform.Translate (speed * Vector3.down * Time.deltaTime);
+				GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
+
+				if (enemies.Length > 0) {
+					RandomEnemyShot (enemies);
+					UpdateBoundary (enemies);
+				}else{
+					waveDone = false;
+
+					StartCoroutine(SpawnWave ());
+				}
 			}
-
-			if (_transform.childCount == 0) {
-				StartCoroutine(SpawnWave ());
-			}
-
-			GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
-			RandomEnemyShot (enemies);
-			UpdateBoundary (enemies);
 		}
 
 		void RandomEnemyShot(GameObject[] enemies){
@@ -87,10 +95,7 @@ namespace SP2D{
 
 		IEnumerator SpawnWave(){
 			_transform.position = Vector3.zero; // back to original position
-			yield return StartCoroutine (CreateEnemies ());
-		}
 
-		IEnumerator CreateEnemies(){
 			for (int x = 0; x < ENEMIES_COLUMN; x++) {
 				for (int y = 0; y < ENEMIES_ROW; y++) {
 					GameObject newEnemy = Instantiate (enemyPrefab);
@@ -100,12 +105,23 @@ namespace SP2D{
 				}
 			}
 
-			columnMin = 0;
-			columnMax = ENEMIES_COLUMN - 1;
-			yield return new WaitForSeconds (1f);
+			yield return new WaitForSeconds (1.0f);
+
+			InitWave ();
+			waveDone = true;
 		}
 
-		public void UpdateBoundary(GameObject[] enemies){
+		private void InitWave(){			
+			lastY = 0;
+			columnMin = 0;
+			columnMax = ENEMIES_COLUMN - 1;
+
+			boundary = new Boundary ();
+			boundary.xMin = WAVE_BOUNDARY_XMIN;
+			boundary.xMax = WAVE_BOUNDARY_XMAX;
+		}
+
+		private void UpdateBoundary(GameObject[] enemies){
 			ArrayList waveColumns = new ArrayList (ENEMIES_COLUMN);
 
 			foreach (GameObject enemy in enemies) {				
