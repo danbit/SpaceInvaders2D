@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using SP2D.Core;
 using SP2D.Managers;
 
 namespace SP2D{
-		
+
 	public class WaveController : MonoBehaviour {
 
 		private const int ENEMIES_COLUMN = 11;
@@ -24,6 +25,8 @@ namespace SP2D{
 		private float lastY = 0;
 		private bool isGoingLeft = false;
 		private bool moveDown = false;
+		private int columnMin;
+		private int columnMax;
 
 		void Start () {
 			_transform = this.transform;
@@ -97,25 +100,31 @@ namespace SP2D{
 				}
 			}
 
-			yield return new WaitForSeconds (0.5f);
+			columnMin = 0;
+			columnMax = ENEMIES_COLUMN - 1;
+			yield return new WaitForSeconds (1f);
 		}
 
-		void UpdateBoundary(GameObject[] enemies){
+		public void UpdateBoundary(GameObject[] enemies){
 			ArrayList waveColumns = new ArrayList (ENEMIES_COLUMN);
 
-			foreach (GameObject enemy in enemies) {
-				int enemyColumn = int.Parse(enemy.name.Substring (enemy.name.Length - 1));
-				waveColumns.Add(enemyColumn);
+			foreach (GameObject enemy in enemies) {				
+				int enemyColumn = int.Parse(enemy.name.Split('_')[1]);
+				if (!waveColumns.Contains (enemyColumn)) {
+					waveColumns.Add (enemyColumn);
+				}
 			}		
 
-			if (waveColumns.Count <= ENEMIES_COLUMN) {
-				for (int x = 0; x < ENEMIES_COLUMN; x++) {
-					//if (x == waveColumns [x]) {
-					//	break;
-					//}
-				}
+			if (columnMin != (int)waveColumns [0]) {
+				boundary.xMin -= HORIZONTAL_ENEMY_OFFSET;
+				columnMin++;
 			}
 
+			if (columnMax != (int)waveColumns [waveColumns.Count - 1]) {
+				boundary.xMax += HORIZONTAL_ENEMY_OFFSET;
+				columnMax--;
+			}
+				
 		}
 
 	}
