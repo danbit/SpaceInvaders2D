@@ -1,4 +1,4 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using SP2D.Core;
@@ -17,8 +17,8 @@ namespace SP2D{
 		private const float WAVE_BOUNDARY_XMAX = 2.7f;
 		private const float ORIGINAL_SPEED = 1.0f;
 
-		public GameObject enemyPrefab;
-		public GameObject bullet;
+		public GameObject[] enemiesPrefab;
+		public GameObject[] bulletsPrefab;
 		public AudioClip shotSound;
 		public float speed;
 		public int maxAmountShot;
@@ -86,9 +86,23 @@ namespace SP2D{
 
 			GameObject[] shotEnemies = GameObject.FindGameObjectsWithTag ("ShotEnemy");
 			if (shotEnemies.Length <= maxAmountShot) {
-				GameObject newShot = Instantiate<GameObject> (bullet);
-				newShot.tag = "ShotEnemy";
-				newShot.transform.position = enemyToShot.transform.position;
+				GameObject newShot;
+
+				if (enemyToShot.gameObject.name.Contains ("Blue")) {
+					newShot = Instantiate<GameObject> (bulletsPrefab[1]);
+					newShot.tag = "ShotEnemy";
+					Vector3 newPos = new Vector3 (enemyToShot.transform.position.x - 0.147f, enemyToShot.transform.position.y - 0.06f, 0.0f);
+					newShot.transform.position = newPos;
+
+					newShot = Instantiate<GameObject> (bulletsPrefab[1]);
+					newShot.tag = "ShotEnemy";
+					newPos = new Vector3 (enemyToShot.transform.position.x + 0.147f, enemyToShot.transform.position.y - 0.06f, 0.0f);
+					newShot.transform.position = newPos;
+				} else {
+					newShot = Instantiate<GameObject> (bulletsPrefab[0]);
+					newShot.tag = "ShotEnemy";
+					newShot.transform.position = enemyToShot.transform.position;
+				}
 
 				SoundManager.instance.RandomizeSfx (shotSound);
 			}
@@ -99,8 +113,19 @@ namespace SP2D{
 
 			for (int x = 0; x < ENEMIES_COLUMN; x++) {
 				for (int y = 0; y < ENEMIES_ROW; y++) {
-					GameObject newEnemy = Instantiate (enemyPrefab);
-					newEnemy.gameObject.name = "Enemy_" + x;
+					GameObject newEnemy;
+
+					if (y <= 1) {
+						newEnemy = Instantiate (enemiesPrefab[0]);
+						newEnemy.gameObject.name = "EnemyRed_" + x;
+					} else if (y > 1 && y <= 3) {
+						newEnemy = Instantiate (enemiesPrefab[1]);
+						newEnemy.gameObject.name = "EnemyBlue_" + x;
+					} else {
+						newEnemy = Instantiate (enemiesPrefab[2]);
+						newEnemy.gameObject.name = "EnemyBlack_" + x;
+					}
+
 					newEnemy.transform.SetParent (_transform);
 					newEnemy.transform.localPosition = new Vector3 (-6.5f + x * HORIZONTAL_ENEMY_OFFSET, y * VERTICAL_ENEMY_OFFSET, 0.0f); 
 				}
@@ -108,11 +133,11 @@ namespace SP2D{
 
 			yield return new WaitForSeconds (1.0f);
 
-			InitWave ();
+			InitWaveSetup ();
 			waveDone = true;
 		}
 
-		private void InitWave(){			
+		private void InitWaveSetup(){			
 			lastY = 0;
 			columnMin = 0;
 			columnMax = ENEMIES_COLUMN - 1;

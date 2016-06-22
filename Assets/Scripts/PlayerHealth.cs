@@ -13,7 +13,7 @@ namespace SP2D{
 		public static int health;
 
 		void OnTriggerEnter2D(Collider2D other){
-			if (other.tag == "ShotEnemy" && !GameManager.instance.PlayerIsDead) {
+			if (other.CompareTag("ShotEnemy") && !GameManager.instance.PlayerIsDead) {
 				health--;
 				GameObject.FindObjectOfType<Health> ().UpdateHealthUI (health);
 			}

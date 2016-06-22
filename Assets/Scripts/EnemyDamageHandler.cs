@@ -8,7 +8,7 @@ namespace SP2D{
 	public class EnemyDamageHandler : MonoBehaviour {
 
 		void OnTriggerEnter2D (Collider2D other) {
-			if (other.tag == "ShotPlayer") {
+			if (other.CompareTag("ShotPlayer")) {
 				GameObject.FindObjectOfType<Score> ().UpdateScoreUI ();
 				this.enabled = false;
 

@@ -7,7 +7,7 @@ namespace SP2D{
 	public class PlayerDeath : MonoBehaviour {
 
 		void OnTriggerEnter2D (Collider2D other) {		
-			if (other.tag == "ShotEnemy" && !GameManager.instance.PlayerIsDead) {			
+			if (other.CompareTag("ShotEnemy") && !GameManager.instance.PlayerIsDead) {			
 				GameManager.instance.PlayerIsDead = true;
 				AnimationManager.instance.PlayExplosion(transform);
 
